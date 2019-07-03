@@ -8,7 +8,7 @@ from torch.autograd import Variable
 from itertools import count
 
 import onmt.ModelConstructor
-import onmt.translate2.Beam
+import onmt.translate.Beam
 import onmt.io
 import onmt.opts
 

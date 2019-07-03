@@ -1,6 +1,6 @@
 from __future__ import division
 import torch
-from onmt.translate2 import Penalties
+from onmt.translate import Penalties
 import numpy as np
 
 

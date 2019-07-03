@@ -9,11 +9,11 @@ import codecs
 import json
 import threading
 
-from onmt.translate2.Translator import make_translator
+from onmt.translate.Translator import make_translator
 
 import onmt
 import onmt.opts
-import onmt.translate2
+import onmt.translate
 
 
 class Timer:
