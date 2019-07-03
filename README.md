@@ -62,5 +62,5 @@ tim.vandecruys@irit.fr
 ## Dependencies
 
 Pytorch is the most important one; all dependencies are stipulated
-environment.yml, which can be used for a suitable Anaconda
+in the file `environment.yml`, which can be used to create a suitable Anaconda
 environment.
