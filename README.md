@@ -64,3 +64,7 @@ English and Dutch are equally in the pipeline.
 Pytorch is the most important one; all dependencies are stipulated
 in the file `environment.yml`, which can be used to create a suitable Anaconda
 environment.
+
+Note that the poetry generation system heavily relies on an adapted
+version of OpenNMT's PyTorch version
+(https://github.com/OpenNMT/OpenNMT-py; included as a module).
