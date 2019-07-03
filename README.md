@@ -5,6 +5,7 @@ v0.11
 developed at IRIT, Toulouse
 
 tim.vandecruys@irit.fr
+
 www.timvandecruys.be
 
 
@@ -22,9 +23,6 @@ version. At the moment, the code is not very clean, and it will
 undergo significant rewrites in the following months.
 
 Currently hard-coded for execution on the GPU.
-
-Currently, only models for French are available; models for both
-English and Dutch are equally in the pipeline.
 
 ## Installation and execution
 
@@ -57,6 +55,9 @@ Model files (neural network parameters, rhyme dictionary, nmf model,
 n-gram model) are not included due to there large file size
 (3.7GB). In order to obtain a copy, send a mail to
 tim.vandecruys@irit.fr
+
+Currently, only models for French are available; models for both
+English and Dutch are equally in the pipeline.
 
 ## Dependencies
 
