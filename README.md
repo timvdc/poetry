@@ -52,7 +52,7 @@ p.write(nmfDim=1)
 ## Model files
 
 Model files (neural network parameters, rhyme dictionary, nmf model,
-n-gram model) are not included due to there large file size
+n-gram model) are not included due to their large file size
 (3.7GB). In order to obtain a copy, send a mail to
 tim.vandecruys@irit.fr
 
