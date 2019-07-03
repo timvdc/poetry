@@ -1,4 +1,4 @@
-# Charles -- poetry system for French
+# Charles - automatic poetry generation for French
 
 v0.11
 
