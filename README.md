@@ -31,21 +31,24 @@ English and Dutch are equally in the pipeline.
 
 1) Clone the git repository:
 
-git clone https://github.com/timvdc/poetry.git
+
+`git clone https://github.com/timvdc/poetry.git`
 
 2) Create an anaconda (python3) environment with all the necessary
 dependencies; an environment description is included in the
 archive. The environment can be installed with the command:
 
-conda env create -f environment.yml
+`conda env create -f environment.yml`
 
 3) Once installed, activate the environment, and run python. A poem
 can then be written using the following commands:
 
+~~~
 import charles
 p = charles.Poem()
 p.write()
 p.write(nmfDim=1)
+~~~~
 
 ## dependencies
 
