@@ -15,12 +15,12 @@ Charles is a system for automatic poetry generation, developed within
 the MELODI group at IRIT, the research institute for computer science
 in Toulouse. Charles has been trained on billions of words extracted
 from generic web texts; its rhyming knowledge has been extracted from
-the French Wiktionary, and it automatically learned an elemntary
+the French Wiktionary, and it automatically learned an elementary
 notion of sense by looking at the context of words.
 
 NOTE: experimental, unclean, and badly documented development
 version. At the moment, the code is not very clean, and it will
-undergo significant rewrites in the following months.
+undergo significant rewriting and refactoring in the following months.
 
 Currently hard-coded for execution on the GPU.
 
