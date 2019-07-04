@@ -19,8 +19,8 @@ the French Wiktionary, and it automatically learned an elementary
 notion of sense by looking at the context of words.
 
 NOTE: experimental, unclean, and badly documented development
-version. At the moment, the code is not very clean, and it will
-undergo significant rewriting and refactoring in the following months.
+version. The code will undergo significant rewriting and refactoring
+in the following months.
 
 Currently hard-coded for execution on the GPU.
 
