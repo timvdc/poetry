@@ -1,6 +1,6 @@
 # Charles - automatic poetry generation for French
 
-v0.11
+v0.9
 
 developed at IRIT, Toulouse
 
@@ -39,8 +39,9 @@ archive. The environment can be installed with the command:
 
 3) Put the required model files (not included) in directory `data`
 
-4) Once installed and model files in place, activate the environment, and run python. A poem
-can then be written using the following commands:
+4) Once installed and model files in place, activate the environment,
+and run python. A poem can then be written using the following
+commands:
 
 ~~~
 import charles
@@ -51,7 +52,7 @@ p.write(nmfDim=1)
 
 ## Model files
 
-Model files (neural network parameters, rhyme dictionary, nmf model,
+Model files (neural network parameters, rhyme dictionary, NMF model,
 n-gram model) are not included due to their large file size
 (3.7GB). In order to obtain a copy, send a mail to
 tim.vandecruys@irit.fr
@@ -61,10 +62,9 @@ English and Dutch are equally in the pipeline.
 
 ## Dependencies
 
-Pytorch is the most important one; all dependencies are stipulated
-in the file `environment.yml`, which can be used to create a suitable Anaconda
-environment.
-
-Note that the poetry generation system heavily relies on an adapted
-version of OpenNMT's PyTorch version
-(https://github.com/OpenNMT/OpenNMT-py; included as a module).
+Pytorch is the most important one; all dependencies are stipulated in
+the file `environment.yml`, which can be used to create a suitable
+Anaconda environment. Note that the poetry generation system heavily
+relies on the Pytorch version of OpenNMT
+(https://github.com/OpenNMT/OpenNMT-py), which equally needs to be
+installed.
