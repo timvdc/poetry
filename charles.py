@@ -36,7 +36,7 @@ RHYME_FREQ_FILE = 'data/rijm_fr_small.freq'
 RHYME_DICT_FILE = 'data/rhymeDictionary_fr.pickle'
 RHYME_INV_DICT_FILE = 'data/rhymeInv_fr_utf8.pickle'
 
-MODEL_FILE = 'data/fr_aran_full_rev-model_e512_d2048_general_acc_0.00_ppl_28.61_e25.pt'
+MODEL_FILE = 'data/fr_full_rev-model_e512_d2048_general_acc_0.00_ppl_28.61_e25.pt'
 
 class Poem:
 
@@ -66,7 +66,7 @@ class Poem:
     
         self.loadVocabulary()
 
-        self.ngramModel = kenlm.Model('data/corpus_all_3gram.binary')
+        self.ngramModel = kenlm.Model('data/corpus_pruned_3gram.binary')
         
         if not os.path.exists('log'):
             os.makedirs('log')
