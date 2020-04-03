@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 
 import sys
-from subprocess import Popen, PIPE
 import random
 from countsyl import count_syllables
 import time
 import numpy as np
-import pickle as pickle
-from threading  import Thread
-from queue import Queue, Empty
+import pickle
 import os
 import numpy as np
 import scipy.stats
@@ -24,9 +21,12 @@ import onmt
 import argparse
 import torch
 
+from verse_generator import VerseGenerator
+
 #this one for RTX (cudnn too old)
 #torch.backends.cudnn.enabled = False
 
+#warnings.simplefilter(action = "ignore", category = FutureWarning)
 warnings.filterwarnings("ignore")
 
 NMF_FILE = 'data/p_wd2_d100.npy'
@@ -36,7 +36,7 @@ RHYME_FREQ_FILE = 'data/rijm_fr_small.freq'
 RHYME_DICT_FILE = 'data/rhymeDictionary_fr.pickle'
 RHYME_INV_DICT_FILE = 'data/rhymeInv_fr_utf8.pickle'
 
-MODEL_FILE = 'data/fr_full_rev-model_e512_d2048_general_acc_0.00_ppl_28.61_e25.pt'
+MODEL_FILE = 'data/fr_aran_full_rev-model_e512_d2048_general_acc_0.00_ppl_28.61_e25.pt'
 
 class Poem:
 
@@ -52,6 +52,11 @@ class Poem:
                                'c','d','c','d'),
                               'shorter':
                               ('a','b','a','b'),
+                              'pantoum':
+                              ('a', 'b', 'c', 'd', '',
+                               'b','e','d','f','',
+                               'e', 'g', 'f', 'h', '',
+                               'g', 'a', 'h', 'c'),
                               }
         self.form = form
         self.loadRhymeDictionary()
@@ -61,8 +66,10 @@ class Poem:
     
         self.loadVocabulary()
 
-        self.ngramModel = kenlm.Model('data/corpus_pruned_3gram.binary')
-
+        self.ngramModel = kenlm.Model('data/corpus_all_3gram.binary')
+        
+        if not os.path.exists('log'):
+            os.makedirs('log')
         logfile = 'log/poem_' + datetime.now().strftime("%Y%m%d")
         self.log = open(logfile, 'a')
 
@@ -84,7 +91,6 @@ class Poem:
         self.rhymeInvDictionary = pickle.load(open(RHYME_INV_DICT_FILE, 'rb'))
 
     def loadVocabulary(self):
-        i2w,w2i = [], {}
         self.i2w = self.generator.vocab.itos
         self.w2i = self.generator.vocab.stoi
 
@@ -104,8 +110,8 @@ class Poem:
         else:
             nmfDim = None
         if nmfDim:
-            sys.stdout.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") +' nmfdim ' + str(nmfDim) + ' (' + ','.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
-            self.log.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' nmfdim ' + str(nmfDim) + ' (' + ','.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
+            sys.stdout.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") +' nmfdim ' + str(nmfDim) + ' (' + ', '.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
+            self.log.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' nmfdim ' + str(nmfDim) + ' (' + ', '.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
         else:
             sys.stdout.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' NO nmfdim' + '\n\n')
             self.log.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' NO nmfdim' + '\n\n')
@@ -118,13 +124,11 @@ class Poem:
                     continue
                 else:
                     sys.stdout.write(' '.join(words) + '\n')
-                    #self.typeString(' '.join(words) + '\n')
                     self.log.write(' '.join(words) + '\n')
                     try:
                         self.blacklist.append(self.rhymeDictionary[words[-1]])
                         self.blacklist_words = self.blacklist_words.union(words)
                     except KeyError as e:
-                        #TODO
                         #means verse does not follow rhyme, probably because of entropy computations
                         #do not show error for presentation
                         #print('err blacklist', e)
@@ -152,12 +156,12 @@ class Poem:
             nmfPrior = copy.deepcopy(self.W[:,nmf])
         else:
             nmfPrior = None
+
         allCandidates = []
         allProbScores = []
         allEncDecScores = []
-        for batch, probScores in self.generator.generate_candidates(previous=previous,rhymePrior=rhymePrior, nmfPrior=nmfPrior):
-            allCandidates.extend(batch)
-            allProbScores.extend(probScores)
+
+        allCandidates, allProbScores = self.generator.generateCandidates(previous=previous,rhymePrior=rhymePrior, nmfPrior=nmfPrior)
 
         ngramScores = []
         for ncand, candidate in enumerate(allCandidates):
@@ -170,9 +174,13 @@ class Poem:
         largest = ngramScores[np.argmax(ngramScores)]
         ngramNorm = np.exp(ngramScores - largest)
 
+        allProbScores = np.array([i.cpu().detach().numpy() for i in allProbScores])
+        largest = allProbScores[np.argmax(allProbScores)]
+        allProbNorm = np.exp(allProbScores - largest)
+
         scoreList = []
         for ncand, candidate in enumerate(allCandidates):
-            allScores = [allProbScores[ncand], ngramNorm[ncand]]
+            allScores = [allProbNorm[ncand], ngramNorm[ncand]]
             if syllables:
                 syllablesScore = self.checkSyllablesScore(candidate, mean=12, std=2)
                 allScores.append(syllablesScore)
@@ -184,6 +192,7 @@ class Poem:
 
         scoreList.sort()
         scoreList.reverse()
+
         return scoreList[0][1]
 
     def getRhymeStructure(self, cutoff=5):
@@ -249,97 +258,3 @@ class Poem:
         NMFTop = np.max(np.max(self.W[:,dimList], axis=0))
         NMFScore = self.computeNMFScore(words, dimList)
         return NMFScore / NMFTop
-        
-
-class VerseGenerator:
-    def __init__(self, modelFile):
-        opt = argparse.Namespace(model=modelFile, data_type='text', gpu=0)
-        self.fields, self.model, self.model_opt = \
-            onmt.ModelConstructor.load_test_model(opt, {})
-        self.vocab = self.fields["tgt"].vocab
-
-        self.batch_size_decoder = 20
-        self.max_length = 100
-        
-    def generate_candidates(self, previous, rhymePrior, nmfPrior):
-        # process priors once, not in generation loop
-        if rhymePrior is not None and nmfPrior is not None:
-            # combine both priors
-            rhymePrior = rhymePrior * nmfPrior
-            rhymePrior = rhymePrior / np.sum(rhymePrior)
-        if rhymePrior is not None:
-            rhymePrior = torch.tensor(rhymePrior).float()
-            rhymePrior = rhymePrior.repeat(self.batch_size_decoder, 1)
-        if nmfPrior is not None:
-            nmfPrior = torch.tensor(nmfPrior).float()
-            nmfPrior = nmfPrior.repeat(self.batch_size_decoder, 1)
-
-        for nbatch in range(50):
-
-            if previous is None:
-                # when no previous verse is defined (first verse of
-                # the poem), encode the phrase "unk unk unk" - this
-                # works better for initialization of the decoder than
-                # an all-zero or random hidden encoder state
-                src = torch.tensor([0, 0, 0])
-
-            else:
-                src = torch.tensor([self.vocab.stoi[w] for w in previous])
-            # we need a three-way tensor, double unsqueeze
-            src = src.unsqueeze(1).unsqueeze(2).cuda()
-            src_lengths = torch.tensor([src.size(0)]).cuda()
-
-
-            enc_states, memory_bank = self.model.encoder(src, src_lengths)
-            dec_states = self.model.decoder.init_decoder_state(
-            src, memory_bank, enc_states)
-
-
-            memory_bank = memory_bank.repeat(1, self.batch_size_decoder, 1).cuda()
-            memory_lengths = src_lengths.repeat(self.batch_size_decoder).cuda()
-            dec_states.repeat_beam_size_times(self.batch_size_decoder)
-
-            sampler = onmt.translate.Sampler(self.batch_size_decoder,
-                                              pad=self.vocab.stoi[onmt.io.PAD_WORD],
-                                              eos=self.vocab.stoi[onmt.io.EOS_WORD],
-                                              bos=self.vocab.stoi[onmt.io.BOS_WORD],
-                                              cuda=True
-                                           )
-
-
-
-            for i in range(self.max_length):
-
-                inp = torch.stack([sampler.get_current_state()])
-                inp = inp.contiguous().t().view(1,-1)
-
-                if sampler.done():
-                    break
-
-                inp = inp.unsqueeze(2).cuda()
-
-                dec_out, dec_states, attn = self.model.decoder(
-                    inp, memory_bank, dec_states, memory_lengths=memory_lengths)
-                dec_out = dec_out.squeeze(0)
-
-                out = self.model.generator.forward(dec_out).data
-
-                if i == 0 and rhymePrior is not None:
-                    sampler.advance(out, prior=rhymePrior.cuda())
-                elif nmfPrior is not None:
-                    sampler.advance(out, prior=nmfPrior.cuda())
-                else:
-                    sampler.advance(out)
-
-            # assemble verse candidates and scores
-            batch_matrix = torch.stack(sampler.next_ys).cpu().numpy().T
-            allCandidates = []
-            for i in range(self.batch_size_decoder):
-                currSentVector = batch_matrix[i]
-                currSentVector = currSentVector[1:np.where(currSentVector == 3)[0][0]]
-                currSentWords = [self.vocab.itos[j] for j in currSentVector]
-                currSentWords.reverse()
-                allCandidates.append(currSentWords)
-            allScores = list(sampler.scores)
-            yield allCandidates, allScores
-
