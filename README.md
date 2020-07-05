@@ -103,7 +103,7 @@ installed.
 
 ## Reference
 
-Tim Van de Cruys. 2020. Automatic Poetry Generation from Prosaic Text. In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)*, pp. 2471-2480.
+Tim Van de Cruys. 2020. [Automatic Poetry Generation from Prosaic Text](https://www.aclweb.org/anthology/2020.acl-main.223.pdf). In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)*, pp. 2471-2480.
 
 ~~~
 @inproceedings{vandecruys2020automatic,
