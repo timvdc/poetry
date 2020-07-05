@@ -88,8 +88,8 @@ NOTE: Currently hard-coded for execution on the GPU.
 ## Model files
 
 Model files (neural network parameters, rhyme dictionary, NMF model,
-n-gram model) are not included due to their large file size
-(3.7GB). In order to obtain a copy, send a mail to
+n-gram model) are not included due to their large file size (2.6GB for
+French, 3.4GB for English). In order to obtain a copy, send a mail to
 tim.vandecruys@irit.fr
 
 ## Dependencies
@@ -103,7 +103,10 @@ installed.
 
 ## Reference
 
-Tim Van de Cruys. 2020. [Automatic Poetry Generation from Prosaic Text](https://www.aclweb.org/anthology/2020.acl-main.223.pdf). In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)*, pp. 2471-2480.
+Tim Van de Cruys. 2020. [Automatic Poetry Generation from Prosaic
+Text](https://www.aclweb.org/anthology/2020.acl-main.223.pdf). In
+*Proceedings of the 58th Annual Meeting of the Association for
+Computational Linguistics (ACL)*, pp. 2471-2480.
 
 ~~~
 @inproceedings{vandecruys2020automatic,
