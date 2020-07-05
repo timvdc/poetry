@@ -92,9 +92,6 @@ n-gram model) are not included due to their large file size
 (3.7GB). In order to obtain a copy, send a mail to
 tim.vandecruys@irit.fr
 
-Currently, only models for French are available; models for both
-English and Dutch are equally in the pipeline.
-
 ## Dependencies
 
 Pytorch is the most important one; all dependencies are stipulated in
@@ -103,3 +100,18 @@ Anaconda environment. Note that the poetry generation system heavily
 relies on the Pytorch version of OpenNMT
 (https://github.com/OpenNMT/OpenNMT-py), which equally needs to be
 installed.
+
+## Reference
+
+Tim Van de Cruys. 2020. Automatic Poetry Generation from Prosaic Text. In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)*, pp. 2471-2480.
+
+~~~
+@inproceedings{vandecruys2020automatic,
+    title = "Automatic Poetry Generation from Prosaic Text",
+    author = "Van de Cruys, Tim",
+    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
+    year = "2020",
+    publisher = "Association for Computational Linguistics",
+    pages = "2471--2480",
+}
+~~~
