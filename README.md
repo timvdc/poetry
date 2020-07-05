@@ -22,6 +22,39 @@ Sylvia writes in English, while Charles is French.
 
 ## Examples
 
+~~~
+2020-07-05 23:42:52 nmfdim 1 (tendresse, joie, bonheur)
+
+je sentais les larmes sur son visage
+je le ressens au plus profond de mon cœur
+merci de ta tendresse , pour ce partage
+je t' aime d' amour , c' est un vrai bonheur
+
+la douceur de tes mots me rend malade
+tu es mon coeur , j' aime le silence
+tu es ma joie dans mes nuits froides
+tu me rappelle des souvenirs d' enfance
+
+                                     - Charles
+~~~
+
+~~~
+2020-07-05 23:44:53 nmfdim 13 (sorrow, longing, admiration)
+
+it seemed as though he 'd never had a heart attack
+after a moment , a sudden silence filled the room
+oh , dear , the man said , his voice almost black
+i smiled , admiring the sight of my hands in the bathroom
+
+for a moment , i felt a sense of great pride
+taking a deep breath , i roused myself to my feet
+i closed my eyes , turning my gaze to the far side
+i was restless , eager to see something to eat
+
+                                     - Sylvia
+
+~~~
+
 ## Installation and execution
 
 1) Clone the git repository:
