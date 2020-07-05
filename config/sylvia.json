@@ -1,0 +1,24 @@
+{
+    "general": {
+	"data_directory": "data",
+	"language": "en",
+	"name": "Sylvia"
+    },
+    "nmf": {
+	"matrix_file": "p_nmf_en_d100.npy",
+	"description_file": "nmf_en_descriptions_d100.pickle"
+    },
+    "rhyme" : {
+	"freq_file": "rijmklanken_en.freq",
+	"rhyme_dict_file": "rhymeDictionary_en.pickle",
+	"rhyme_inv_dict_file": "rhymeDictionary_inv_en.pickle"
+    },
+    "model" : {
+	"parameter_file" : "combined2_l20_step_505000.pt",
+	"ngram_file" : "all_3gram_pruned.binary"
+    },
+    "poem" : {
+	"length": 15,
+	"entropy_threshold": 2.7
+    }
+}

@@ -20,7 +20,7 @@ import numpy as np
 from model_builder_custom import load_test_model_with_projection_layer
 
 class VerseGenerator:
-    def __init__(self, modelFile):
+    def __init__(self, modelFile, entropy_threshold):
 
         
         opt = Namespace(models=[modelFile], data_type='text', gpu=0,
@@ -36,6 +36,7 @@ class VerseGenerator:
         self.batch_size_decoder = 32
         self.max_length = 30
         self.sampling_temp = 0.8
+        self.entropy_threshold = entropy_threshold
 
     def generateCandidates(self, previous, rhymePrior, nmfPrior):
         if rhymePrior is not None:
@@ -89,6 +90,7 @@ class VerseGenerator:
                 exclusion_tokens={},
                 sampling_temp=self.sampling_temp,
                 keep_topk=-1,
+                entropy_threshold=self.entropy_threshold,
             )
 
             #initialize sampler

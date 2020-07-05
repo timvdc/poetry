@@ -1,0 +1,24 @@
+{
+    "general": {
+	"data_directory": "data",
+	"language": "fr",
+	"name": "Charles"
+   },
+    "nmf": {
+	"matrix_file": "p_wd2_d100.npy",
+	"description_file": "description_nmf_d100_it100.pickle"
+    },
+    "rhyme" : {
+	"freq_file": "rijm_fr_small.freq",
+	"rhyme_dict_file": "rhymeDictionary_fr.pickle",
+	"rhyme_inv_dict_file": "rhymeInv_fr_utf8.pickle"
+    },
+    "model" : {
+	"parameter_file" : "fr_full_rev-model_e512_d2048_general_acc_0.00_ppl_28.61_e25.pt",
+	"ngram_file" : "corpus_pruned_3gram.binary"
+    },
+    "poem" : {
+	"length": 12,
+	"entropy_threshold": 4.0
+    }
+}

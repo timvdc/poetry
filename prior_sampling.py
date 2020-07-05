@@ -141,7 +141,7 @@ class PriorSampling(DecodeStrategy):
 
     def __init__(self, pad, bos, eos, batch_size, sample_size, min_length,
                  block_ngram_repeat, exclusion_tokens, return_attention,
-                 max_length, sampling_temp, keep_topk):
+                 max_length, sampling_temp, keep_topk, entropy_threshold):
         #assert block_ngram_repeat == 0
         super(PriorSampling, self).__init__(
             pad, bos, eos, batch_size, sample_size, min_length, block_ngram_repeat,
@@ -151,6 +151,7 @@ class PriorSampling(DecodeStrategy):
         self.topk_scores = None
         self.sample_size = sample_size
         self.block_ngram_repeat = block_ngram_repeat
+        self.entropy_threshold = entropy_threshold
 
     def initialize(self, memory_bank, src_lengths, src_map=None, device=None):
         """Initialize for decoding."""
@@ -212,8 +213,7 @@ class PriorSampling(DecodeStrategy):
             default_probs_log = default_probs.log()
             default_probs_log[default_probs_log == float('-inf')] = -1e20
             vector_entropies = -torch.sum(default_probs * default_probs_log, 1, keepdim=True)
-            #hard-coded entropy cutoff; this needs to change
-            log_probs = torch.where(vector_entropies < 4, default_log_probs, prior_log_probs) #4.5
+            log_probs = torch.where(vector_entropies < self.entropy_threshold, default_log_probs, prior_log_probs)
             
         topk_ids, self.topk_scores = sample_with_temperature_default_logprob(
             log_probs, default_log_probs, self.sampling_temp, self.keep_topk)
