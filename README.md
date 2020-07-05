@@ -1,6 +1,6 @@
-# Charles - automatic poetry generation for French
+# Automatic Poetry Generation from Prosaic Text
 
-v0.9
+v1.0
 
 developed at IRIT, Toulouse
 
@@ -11,18 +11,16 @@ www.timvandecruys.be
 
 ## Introduction
 
-Charles is a system for automatic poetry generation, developed within
-the MELODI group at IRIT, the research institute for computer science
-in Toulouse. Charles has been trained on billions of words extracted
-from generic web texts; its rhyming knowledge has been extracted from
-the French Wiktionary, and it automatically learned an elementary
-notion of sense by looking at the context of words.
+Charles/Sylvia is a system for automatic poetry generation, developed
+within the MELODI group at IRIT, the research institute for computer
+science in Toulouse. The system has been trained on billions of words
+extracted from generic web texts; its rhyming knowledge has been
+extracted from the French Wiktionary, and it automatically learned an
+elementary notion of sense by looking at the context of words.
 
-NOTE: experimental, unclean, and badly documented development
-version. The code will undergo significant rewriting and refactoring
-in the following months.
+Sylvia writes in English, while Charles is French.
 
-Currently hard-coded for execution on the GPU.
+## Examples
 
 ## Installation and execution
 
@@ -41,7 +39,7 @@ archive. The environment can be installed with the command:
 
 4) Once installed and model files in place, activate the environment,
 and run python. A poem can then be written using the following
-commands:
+commands (for French):
 
 ~~~
 import charles
@@ -49,6 +47,10 @@ p = charles.Poem()
 p.write()
 p.write(nmfDim=1)
 ~~~~
+
+For English, replace `charles` with `sylvia`.
+
+NOTE: Currently hard-coded for execution on the GPU.
 
 ## Model files
 
