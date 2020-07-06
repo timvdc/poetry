@@ -18,7 +18,7 @@
 	"ngram_file" : "all_3gram_pruned.binary"
     },
     "poem" : {
-	"length": 15,
+	"length": 12,
 	"entropy_threshold": 2.7
     }
 }
