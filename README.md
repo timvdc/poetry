@@ -15,8 +15,8 @@ Charles/Sylvia is a system for automatic poetry generation, developed
 within the MELODI group at IRIT, the research institute for computer
 science in Toulouse. The system has been trained on billions of words
 extracted from generic web texts; its rhyming knowledge has been
-extracted from the French Wiktionary, and it automatically learned an
-elementary notion of sense by looking at the context of words.
+extracted from Wiktionary, and it automatically learned an elementary
+notion of sense by looking at the context of words.
 
 Sylvia writes in English, while Charles is French.
 
