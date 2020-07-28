@@ -23,7 +23,7 @@ class VerseGenerator:
     def __init__(self, modelFile, entropy_threshold):
 
         
-        opt = Namespace(models=[modelFile], data_type='text', gpu=0,
+        opt = Namespace(models=[modelFile], data_type='text',
                         fp32=False, batch_size=1)
 
         self.fields, self.model, self.model_opt = \
@@ -38,12 +38,14 @@ class VerseGenerator:
         self.sampling_temp = 0.8
         self.entropy_threshold = entropy_threshold
 
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
     def generateCandidates(self, previous, rhymePrior, nmfPrior):
         if rhymePrior is not None:
-            rhymePrior = torch.from_numpy(rhymePrior).float().cuda()
+            rhymePrior = torch.from_numpy(rhymePrior).float().to(self.device)
 
         if nmfPrior is not None:
-            nmfPrior = torch.from_numpy(nmfPrior).float().cuda()
+            nmfPrior = torch.from_numpy(nmfPrior).float().to(self.device)
 
             
         if previous is None:
@@ -55,8 +57,8 @@ class VerseGenerator:
         else:
             src = torch.tensor([self.vocab.stoi[w] for w in previous])
 
-        src = src.view(-1,1,1).cuda()
-        src_lengths = torch.tensor([src.size(0)]).cuda()
+        src = src.view(-1,1,1).to(self.device)
+        src_lengths = torch.tensor([src.size(0)]).to(self.device)
 
         #run encoder
         enc_states, memory_bank, src_lengths = self.model.encoder(src, src_lengths)

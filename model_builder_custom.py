@@ -35,15 +35,14 @@ def load_test_model_with_projection_layer(opt, model_path=None):
     else:
         fields = vocab
 
-    model = build_base_model_with_projection_layer(model_opt, fields, use_gpu(opt), checkpoint,
-                             opt.gpu)
+    model = build_base_model_with_projection_layer(model_opt, fields, checkpoint)
     if opt.fp32:
         model.float()
     model.eval()
     model.generator.eval()
     return fields, model, model_opt
 
-def build_base_model_with_projection_layer(model_opt, fields, gpu, checkpoint=None, gpu_id=None):
+def build_base_model_with_projection_layer(model_opt, fields, checkpoint=None):
     """Build a model from opts.
 
     Args:
@@ -92,12 +91,7 @@ def build_base_model_with_projection_layer(model_opt, fields, gpu, checkpoint=No
     decoder = build_decoder(model_opt, tgt_emb)
 
     # Build NMTModel(= encoder + decoder).
-    if gpu and gpu_id is not None:
-        device = torch.device("cuda", gpu_id)
-    elif gpu and not gpu_id:
-        device = torch.device("cuda")
-    elif not gpu:
-        device = torch.device("cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = onmt.models.NMTModel(encoder, decoder)
 
     # Build Generator.
