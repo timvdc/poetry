@@ -83,8 +83,6 @@ p.write(nmfDim=1)
 
 For English, replace `charles` with `sylvia`.
 
-NOTE: Currently hard-coded for execution on the GPU.
-
 ## Model files
 
 Model files (neural network parameters, rhyme dictionary, NMF model,
