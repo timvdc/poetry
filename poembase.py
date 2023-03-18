@@ -10,7 +10,7 @@ import os
 import numpy as np
 import scipy.stats
 import kenlm
-from datetime import datetime
+from datetime import datetime, timedelta
 import codecs
 import warnings
 from functools import reduce
@@ -59,7 +59,8 @@ class PoemBase:
         self.loadVocabulary()
 
         self.ngramModel = kenlm.Model(self.NGRAM_FILE)
-        
+        #self.ngramModelA = kenlm.Model('annelies.bin')
+
         if not os.path.exists('log'):
             os.makedirs('log')
         logfile = 'log/poem_' + datetime.now().strftime("%Y%m%d")
@@ -87,6 +88,7 @@ class PoemBase:
         self.name = configData['general']['name']
         self.length = configData['poem']['length']
         self.entropy_threshold = configData['poem']['entropy_threshold']
+        self.rhyme_freq_cutoff = configData['poem']['rhyme_freq_cutoff']
 
     def loadNMFData(self):
         self.W = np.load(self.NMF_FILE)
@@ -125,6 +127,7 @@ class PoemBase:
             nmfDim = None
         if not nmfDim == None:
             sys.stdout.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") +' nmfdim ' + str(nmfDim) + ' (' + ', '.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
+            #sys.stdout.write('\n' + (datetime.now() - timedelta(hours=4, minutes=50)).strftime("%Y-%m-%d %H:%M:%S") +' nmfdim ' + str(nmfDim) + ' (' + ', '.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
             self.log.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' nmfdim ' + str(nmfDim) + ' (' + ', '.join(self.nmf_descriptions[nmfDim]) + ')\n\n')
         else:
             sys.stdout.write('\n' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ' NO nmfdim' + '\n\n')
@@ -168,6 +171,9 @@ class PoemBase:
             rhymePrior = None
         if not nmf == None:
             nmfPrior = copy.deepcopy(self.W[:,nmf])
+            #print(nmfPrior.shape)
+            #nmfPrior = copy.deepcopy(np.sum(self.W[:,[57,97]], axis=1) / 2)
+            #print(nmfPrior.shape)
         else:
             nmfPrior = None
 
@@ -199,8 +205,12 @@ class PoemBase:
                 syllablesScore = self.checkSyllablesScore(candidate, mean=self.length, std=2)
                 allScores.append(syllablesScore)
             if nmf:
+                #nmfx = 97
                 NMFScore = self.checkNMF(candidate, [nmf])
                 allScores.append(NMFScore)
+            hetwas = self.checkHetWas(candidate)
+            allScores.append(hetwas)
+            #print(candidate, allScores)
             allScore = hmean(allScores)
             scoreList.append((allScore, candidate, allScores))
 
@@ -209,7 +219,7 @@ class PoemBase:
 
         return scoreList[0][1]
 
-    def getRhymeStructure(self, cutoff=10):
+    def getRhymeStructure(self): #200
         chosenList = []
         mapDict = {}
         structure = self.structureDict[self.form]
@@ -218,7 +228,7 @@ class PoemBase:
             while True:
                 rhymeForm = random.choice(list(self.freqRhyme.keys()))
                 freq = self.freqRhyme[rhymeForm]
-                if (freq >= cutoff) and not rhymeForm in chosenList:
+                if (freq >= self.rhyme_freq_cutoff) and not rhymeForm in chosenList:
                     chosenList.append(rhymeForm)
                     mapDict[el] = rhymeForm
                     break
@@ -272,3 +282,9 @@ class PoemBase:
         NMFTop = np.max(np.max(self.W[:,dimList], axis=0))
         NMFScore = self.computeNMFScore(words, dimList)
         return NMFScore / NMFTop
+
+    def checkHetWas(self, words):
+        if 'het was' in ' '.join(words):
+            return 0
+        else:
+            return 1

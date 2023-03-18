@@ -19,6 +19,7 @@
     },
     "poem" : {
 	"length": 12,
-	"entropy_threshold": 2.7
+	"entropy_threshold": 2.7,
+	"rhyme_freq_cutoff": 30
     }
 }

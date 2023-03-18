@@ -1,0 +1,25 @@
+{
+    "general": {
+	"data_directory": "data",
+	"language": "nl",
+	"name": "Guido"
+    },
+    "nmf": {
+	"matrix_file": "p_nmf_nl_d100.npy",
+	"description_file": "nmf_nl_descriptions_d100.pickle"
+    },
+    "rhyme" : {
+	"freq_file": "rijmklanken_nl.freq",
+	"rhyme_dict_file": "rhymeDictionary_nl.pickle",
+	"rhyme_inv_dict_file": "rhymeDictionary_inv_nl.pickle"
+    },
+    "model" : {
+	"parameter_file" : "encdec_nl_e512_d2048.pt",
+	"ngram_file" : "nlcow_all.binary"
+    },
+    "poem" : {
+	"length": 14,
+	"entropy_threshold": 2.7,
+	"rhyme_freq_cutoff": 200
+    }
+}

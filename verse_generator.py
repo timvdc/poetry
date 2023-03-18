@@ -32,8 +32,8 @@ class VerseGenerator:
         self.vocab = self.fields["tgt"].base_field.vocab
         
         self.batch_size_encoder = opt.batch_size
-        self.n_batches_decoder = 32
-        self.batch_size_decoder = 32
+        self.n_batches_decoder = 32 #32
+        self.batch_size_decoder = 18 #32
         self.max_length = 30
         self.sampling_temp = 0.8
         self.entropy_threshold = entropy_threshold
