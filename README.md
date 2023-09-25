@@ -1,10 +1,8 @@
 # Automatic Poetry Generation from Prosaic Text
 
-v1.0
+v2.0
 
-developed at IRIT, Toulouse
-
-tim.vandecruys@irit.fr
+tim.vandecruys@kuleuven.be
 
 www.timvandecruys.be
 
@@ -12,13 +10,14 @@ www.timvandecruys.be
 ## Introduction
 
 Charles/Sylvia is a system for automatic poetry generation, developed
-within the MELODI group at IRIT, the research institute for computer
-science in Toulouse. The system has been trained on billions of words
-extracted from generic web texts; its rhyming knowledge has been
-extracted from Wiktionary, and it automatically learned an elementary
-notion of sense by looking at the context of words.
+at the Faculty of Arts, KU Leuven, Belgium. The system has been trained
+on billions of wordsextracted from generic web texts; its rhyming
+knowledge has been extracted from Wiktionary, and it automatically
+learned an elementary notion of sense by looking at the context of words.
 
 Sylvia writes in English, while Charles is French.
+
+A previous version of this system was developed at IRIT, Toulouse.
 
 ## Examples
 
