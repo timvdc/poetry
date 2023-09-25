@@ -2,6 +2,8 @@
 
 v2.0
 
+Developed at KU Leuven, Belgium.
+
 tim.vandecruys@kuleuven.be
 
 www.timvandecruys.be
