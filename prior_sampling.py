@@ -110,7 +110,7 @@ def sample_with_temperature_default_logprob(logits, logits_default, sampling_tem
             logits = logits.masked_fill(ignore, -10000)
 
         dist = torch.distributions.Multinomial(
-            logits=logits, total_count=1)
+            logits=logits, total_count=1, validate_args=False)
         topk_ids = torch.argmax(dist.sample(), dim=1, keepdim=True)
         topk_scores = logits_default.gather(dim=1, index=topk_ids)
     return topk_ids, topk_scores

@@ -22,7 +22,8 @@ def load_test_model_with_projection_layer(opt, model_path=None):
     if model_path is None:
         model_path = opt.models[0]
     checkpoint = torch.load(model_path,
-                            map_location=lambda storage, loc: storage)
+                            map_location=lambda storage, loc: storage,
+                            weights_only=False)
 
     model_opt = ArgumentParser.ckpt_model_opts(checkpoint['opt'])
     ArgumentParser.update_model_opts(model_opt)
