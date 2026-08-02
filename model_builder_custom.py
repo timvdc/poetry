@@ -18,6 +18,17 @@ from onmt.utils.parse import ArgumentParser
 from onmt.model_builder import build_encoder, build_decoder, build_embeddings
 
 
+# checkpoints saved with torch 1.x contain a pickled optimizer whose state
+# lacks the 'defaults' attribute expected by torch >= 2.x; the optimizer is
+# not used at generation time, so unpickle it leniently
+def _safe_optimizer_setstate(self, state):
+    self.__dict__.update(state)
+    if not hasattr(self, 'defaults'):
+        self.defaults = {}
+torch.optim.Optimizer.__setstate__ = _safe_optimizer_setstate
+torch.optim.SGD.__setstate__ = _safe_optimizer_setstate
+
+
 def load_test_model_with_projection_layer(opt, model_path=None):
     if model_path is None:
         model_path = opt.models[0]
